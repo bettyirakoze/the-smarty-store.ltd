@@ -12,18 +12,18 @@
 }
 
 body {
-  background: #0b1220;
+  background: #0a0f1a;
   color: white;
 }
 
-/* ================= WELCOME ================= */
+/* ================= WELCOME (UNCHANGED BUT POLISHED) ================= */
 #welcome {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100vh;
-  background: linear-gradient(135deg, #0f172a, #111827);
+  background: radial-gradient(circle at top, #111827, #0a0f1a);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -32,108 +32,162 @@ body {
 
 .welcome-box {
   text-align: center;
-  background: #111827;
+  background: rgba(17, 24, 39, 0.9);
   padding: 50px;
-  border-radius: 16px;
+  border-radius: 18px;
   border: 1px solid #1f2937;
   width: 380px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  backdrop-filter: blur(10px);
 }
 
 .welcome-box h1 {
-  color: #22c55e;
+  color: #f59e0b;
+  font-size: 30px;
   margin-bottom: 10px;
-  font-size: 28px;
 }
 
 .welcome-box p {
   color: #94a3b8;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 .welcome-box button {
+  margin-top: 15px;
   padding: 12px 20px;
   border: none;
-  border-radius: 8px;
-  background: #22c55e;
-  color: white;
+  border-radius: 10px;
+  background: #f59e0b;
+  color: #0a0f1a;
   font-weight: bold;
   cursor: pointer;
 }
 
-.welcome-box button:hover {
-  background: #16a34a;
-}
-
-/* ================= SIDEBAR ================= */
+/* ================= SIDEBAR (LIKE DASHBOARD IMAGE) ================= */
 .sidebar {
   position: fixed;
   width: 240px;
   height: 100vh;
   background: #0f172a;
   padding: 20px;
+  border-right: 1px solid #1f2937;
 }
 
 .logo {
   font-size: 20px;
-  color: #22c55e;
+  color: #f59e0b;
   margin-bottom: 30px;
 }
 
 .nav div {
-  padding: 10px;
-  margin: 5px 0;
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 8px;
   cursor: pointer;
+  color: #94a3b8;
+  transition: 0.3s;
 }
 
-/* ================= MAIN ================= */
+.nav div:hover {
+  background: #1f2937;
+  color: white;
+}
+
+/* ================= MAIN DASHBOARD ================= */
 .main {
   margin-left: 240px;
   padding: 20px;
   display: none;
 }
 
-/* ================= TOP ================= */
+/* ================= TOP BAR ================= */
 .topbar {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin-bottom: 20px;
 }
 
+.topbar h2 {
+  color: #f59e0b;
+}
+
+/* ================= INPUTS ================= */
 input {
   padding: 10px;
   margin: 5px;
   background: #0f172a;
   color: white;
-  border: 1px solid #374151;
+  border: 1px solid #1f2937;
+  border-radius: 8px;
 }
 
+/* ================= BUTTONS ================= */
 button {
   padding: 10px;
   border: none;
+  border-radius: 8px;
   cursor: pointer;
 }
 
-.add { background: #22c55e; }
-.search { background: orange; }
-.edit { background: #3b82f6; }
-.delete { background: red; }
+.add { background: #22c55e; color: white; }
+.search { background: #f59e0b; color: #0a0f1a; }
+.edit { background: #3b82f6; color: white; }
+.delete { background: #ef4444; color: white; }
 
-/* ================= TABLE ================= */
+/* ================= CARDS (LIKE IMAGE ANALYTICS BLOCKS) ================= */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.card {
+  background: #111827;
+  padding: 18px;
+  border-radius: 14px;
+  border: 1px solid #1f2937;
+  text-align: center;
+}
+
+.card h3 {
+  color: #94a3b8;
+  font-size: 13px;
+}
+
+.card p {
+  font-size: 22px;
+  margin-top: 10px;
+  color: #f59e0b;
+  font-weight: bold;
+}
+
+/* ================= TABLE (DASHBOARD STYLE) ================= */
 table {
   width: 100%;
   background: #111827;
   border-collapse: collapse;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 10px;
 }
 
 th, td {
-  padding: 10px;
+  padding: 12px;
   border-bottom: 1px solid #1f2937;
+  text-align: left;
 }
 
-thead { background: #1f2937; }
+thead {
+  background: #0f172a;
+  color: #f59e0b;
+}
 
-/* Highlight total */
+tr:hover {
+  background: #1f2937;
+}
+
+/* TOTAL COLUMN */
 td:nth-child(6){
   color: #22c55e;
   font-weight: bold;
@@ -143,29 +197,33 @@ td:nth-child(6){
 
 <body>
 
-<!-- WELCOME -->
+<!-- ================= WELCOME ================= -->
 <div id="welcome">
   <div class="welcome-box">
     <h1>🛒 SmartStore</h1>
     <p>Inventory Management System</p>
-    <p>Manage your products efficiently and easily</p>
+    <p>Smart Dashboard for Product Control</p>
     <button onclick="startApp()">Enter Dashboard</button>
   </div>
 </div>
 
-<!-- SIDEBAR -->
+<!-- ================= SIDEBAR ================= -->
 <div class="sidebar">
   <div class="logo">SmartStore</div>
   <div class="nav">
-    <div>Dashboard</div>
+    <div>📊 Dashboard</div>
+    <div>➕ Add Product</div>
+    <div>🔍 Search</div>
+    <div>📦 Inventory</div>
   </div>
 </div>
 
-<!-- MAIN -->
+<!-- ================= MAIN ================= -->
 <div class="main">
 
+  <!-- TOP -->
   <div class="topbar">
-    <h2>Inventory</h2>
+    <h2>Inventory Dashboard</h2>
 
     <div>
       <input id="searchId" placeholder="Search">
@@ -174,7 +232,25 @@ td:nth-child(6){
     </div>
   </div>
 
-  <!-- ADD PRODUCT -->
+  <!-- CARDS (LIKE IMAGE ANALYTICS) -->
+  <div class="cards">
+    <div class="card">
+      <h3>Total Products</h3>
+      <p id="totalProducts">0</p>
+    </div>
+
+    <div class="card">
+      <h3>Total Quantity</h3>
+      <p id="totalQty">0</p>
+    </div>
+
+    <div class="card">
+      <h3>Total Value</h3>
+      <p id="totalValue">0</p>
+    </div>
+  </div>
+
+  <!-- ADD -->
   <div>
     <input id="id" placeholder="ID">
     <input id="name" placeholder="Name">
@@ -220,14 +296,18 @@ function display(list = products){
   table.innerHTML="";
 
   list.forEach(p=>{
+    let qty = Number(p.qty);
+    let price = Number(p.price);
+    let total = qty * price;
+
     table.innerHTML += `
       <tr>
         <td>${p.id}</td>
         <td>${p.name}</td>
         <td>${p.category}</td>
-        <td>${p.qty}</td>
-        <td>${p.price}</td>
-        <td>${p.qty * p.price}</td>
+        <td>${qty}</td>
+        <td>${price}</td>
+        <td>${total}</td>
         <td>
           <button class="edit" onclick="editProduct('${p.id}')">Edit</button>
           <button class="delete" onclick="deleteProduct('${p.id}')">Delete</button>
@@ -235,6 +315,18 @@ function display(list = products){
       </tr>
     `;
   });
+
+  updateStats(list);
+}
+
+function updateStats(list){
+  document.getElementById("totalProducts").innerText = list.length;
+
+  let qty = list.reduce((a,b)=>a+Number(b.qty),0);
+  document.getElementById("totalQty").innerText = qty;
+
+  let value = list.reduce((a,b)=>a+(Number(b.qty)*Number(b.price)),0);
+  document.getElementById("totalValue").innerText = value;
 }
 
 function addProduct(){
@@ -245,23 +337,31 @@ function addProduct(){
 
   if(products.find(p=>p.id===id)) return alert("Duplicate ID");
 
-  products.push({id,name,category:cat,qty,price});
+  products.push({
+    id,
+    name,
+    category: cat,
+    qty: Number(qty),
+    price: Number(price)
+  });
+
   display();
 }
 
 function deleteProduct(id){
-  if(!confirm("Delete this product?")) return;
+  if(!confirm("Delete?")) return;
   products = products.filter(p=>p.id!==id);
   display();
 }
 
 function editProduct(id){
   let p = products.find(p=>p.id===id);
+
   let qty = prompt("Qty", p.qty);
   let price = prompt("Price", p.price);
 
-  if(qty) p.qty = qty;
-  if(price) p.price = price;
+  if(qty) p.qty = Number(qty);
+  if(price) p.price = Number(price);
 
   display();
 }
@@ -279,7 +379,7 @@ function searchProduct(){
 }
 
 function v(id){
-  return document.getElementById(id).value;
+  return document.getElementById(id).value.trim();
 }
 
 display();
@@ -287,4 +387,4 @@ display();
 </script>
 
 </body>
-</html>
+</html>i need this button of the  interactive which is  in same line of the dashboard
