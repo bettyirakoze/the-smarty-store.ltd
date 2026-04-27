@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>SmartStore Pro Dashboard</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  background: #0b1220;
+  color: white;
+}
+
+/* ================= WELCOME SCREEN ================= */
+#welcome {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: linear-gradient(135deg, #0f172a, #111827);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.welcome-box {
+  text-align: center;
+  background: #111827;
+  padding: 40px;
+  border-radius: 16px;
+  border: 1px solid #1f2937;
+  width: 350px;
+}
+
+.welcome-box h1 {
+  color: #22c55e;
+  margin-bottom: 10px;
+}
+
+.welcome-box p {
+  color: #94a3b8;
+  margin-bottom: 20px;
+}
+
+.welcome-box button {
+  padding: 12px 18px;
+  border: none;
+  border-radius: 8px;
+  background: #22c55e;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* ================= SIDEBAR ================= */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 240px;
+  height: 100vh;
+  background: #0f172a;
+  padding: 20px;
+  border-right: 1px solid #1f2937;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: bold;
+  color: #22c55e;
+  margin-bottom: 30px;
+}
+
+.nav div {
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #cbd5e1;
+}
+
+.nav div:hover {
+  background: #1f2937;
+}
+
+/* ================= MAIN ================= */
+.main {
+  margin-left: 240px;
+  padding: 20px;
+  display: none;
+}
+
+/* ================= TOPBAR ================= */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.searchbox input {
+  padding: 10px;
+  width: 260px;
+  border-radius: 8px;
+  border: 1px solid #374151;
+  background: #0f172a;
+  color: white;
+}
+
+/* ================= CARDS ================= */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.card {
+  background: #111827;
+  padding: 18px;
+  border-radius: 12px;
+  border: 1px solid #1f2937;
+}
+
+.card h3 {
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+.card p {
+  font-size: 22px;
+  margin-top: 8px;
+  font-weight: bold;
+}
+
+/* ================= PANEL ================= */
+.panel {
+  background: #111827;
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+input {
+  padding: 10px;
+  margin: 5px;
+  border-radius: 8px;
+  border: 1px solid #374151;
+  background: #0f172a;
+  color: white;
+  width: 160px;
+}
+
+button {
+  padding: 10px 14px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.add { background: #22c55e; color: white; }
+.search { background: #f59e0b; color: white; }
+.edit { background: #3b82f6; color: white; }
+.delete { background: #ef4444; color: white; }
+
+/* ================= TABLE ================= */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #111827;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+th, td {
+  padding: 12px;
+  border-bottom: 1px solid #1f2937;
+  text-align: left;
+  color: #e5e7eb;
+}
+
+thead {
+  background: #1f2937;
+}
+
+tr:hover {
+  background: #1f2937;
+}
+</style>
+</head>
+
+<body>
+
+<!-- ================= WELCOME SCREEN ================= -->
+<div id="welcome">
+  <div class="welcome-box">
+    <h1>🛒 SmartStore</h1>
+    <p>Inventory Management System</p>
+    <p>Manage products easily and efficiently</p>
+    <button onclick="startApp()">Enter Dashboard</button>
+  </div>
+</div>
+
+<!-- ================= SIDEBAR ================= -->
+<div class="sidebar">
+  <div class="logo">🛒 SmartStore</div>
+  <div class="nav">
+    <div>📊 Dashboard</div>
+    <div>➕ Add Product</div>
+    <div>🔍 Search</div>
+    <div>📦 Inventory</div>
+  </div>
+</div>
+
+<!-- ================= MAIN ================= -->
+<div class="main">
+
+  <div class="topbar">
+    <h2>Inventory Dashboard</h2>
+
+    <div class="searchbox">
+      <input id="searchId" placeholder="Search ID / Name / Category">
+      <button class="search" onclick="searchProduct()">Search</button>
+      <button onclick="display(products)">Reset</button>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <h3>Total Products</h3>
+      <p id="totalProducts">0</p>
+    </div>
+
+    <div class="card">
+      <h3>Total Quantity</h3>
+      <p id="totalQty">0</p>
+    </div>
+
+    <div class="card">
+      <h3>Total Value</h3>
+      <p id="totalValue">0</p>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>➕ Add Product</h3>
+
+    <input id="id" placeholder="ID">
+    <input id="name" placeholder="Name">
+    <input id="category" placeholder="Category">
+    <input id="qty" type="number" placeholder="Qty">
+    <input id="price" type="number" placeholder="Price">
+
+    <button class="add" onclick="addProduct()">Add</button>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Qty</th>
+        <th>Price</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody id="table"></tbody>
+  </table>
+
+</div>
+
+<script>
+
+function startApp() {
+  document.getElementById("welcome").style.display = "none";
+  document.querySelector(".main").style.display = "block";
+}
+
+let products = [
+  {id:"1", name:"Phone", category:"Electronics", qty:10, price:300},
+  {id:"2", name:"Shoes", category:"Fashion", qty:20, price:50},
+  {id:"3", name:"Book", category:"Education", qty:15, price:10}
+];
+
+function display(list = products) {
+  const table = document.getElementById("table");
+  table.innerHTML = "";
+
+  list.forEach(p => {
+    table.innerHTML += `
+      <tr>
+        <td>${p.id}</td>
+        <td>${p.name}</td>
+        <td>${p.category}</td>
+        <td>${p.qty}</td>
+        <td>${p.price}</td>
+        <td>
+          <button class="edit" onclick="editProduct('${p.id}')">Edit</button>
+          <button class="delete" onclick="deleteProduct('${p.id}')">Delete</button>
+        </td>
+      </tr>
+    `;
+  });
+
+  updateStats(list);
+}
+
+function updateStats(list) {
+  document.getElementById("totalProducts").innerText = list.length;
+
+  let qty = list.reduce((a,b)=>a+Number(b.qty),0);
+  document.getElementById("totalQty").innerText = qty;
+
+  let value = list.reduce((a,b)=>a+(Number(b.qty)*Number(b.price)),0);
+  document.getElementById("totalValue").innerText = value;
+}
+
+function addProduct() {
+  let id = v("id");
+  let name = v("name");
+  let category = v("category");
+  let qty = v("qty");
+  let price = v("price");
+
+  if (!id || !name || !category || !qty || !price) return;
+
+  if (products.some(p => p.id === id)) return alert("Duplicate ID");
+
+  products.push({id,name,category,qty,price});
+  display(products);
+}
+
+function deleteProduct(id) {
+  if (!confirm("Delete this product?")) return;
+  products = products.filter(p => p.id !== id);
+  display(products);
+}
+
+function editProduct(id) {
+  let p = products.find(p => p.id === id);
+
+  let qty = prompt("Qty", p.qty);
+  let price = prompt("Price", p.price);
+
+  if (qty !== null) p.qty = qty;
+  if (price !== null) p.price = price;
+
+  display(products);
+}
+
+function searchProduct() {
+  let value = v("searchId").toLowerCase().trim();
+
+  if (!value) return display(products);
+
+  let result = products.filter(p =>
+    p.id.toLowerCase().includes(value) ||
+    p.name.toLowerCase().includes(value) ||
+    p.category.toLowerCase().includes(value)
+  );
+
+  display(result);
+}
+
+document.getElementById("searchId").addEventListener("keydown", e=>{
+  if (e.key === "Enter") searchProduct();
+});
+
+function v(id){
+  return document.getElementById(id).value.trim();
+}
+
+display(products);
+
+</script>
+
+</body>
+</html>
