@@ -193,12 +193,16 @@ thead {
 tr:hover {
   background: #1f2937;
 }
+
+/* Title style */
+td strong {
+  color: #22c55e;
+}
 </style>
 </head>
 
 <body>
 
-<!-- ================= WELCOME SCREEN ================= -->
 <div id="welcome">
   <div class="welcome-box">
     <h1>🛒 SmartStore</h1>
@@ -208,7 +212,6 @@ tr:hover {
   </div>
 </div>
 
-<!-- ================= SIDEBAR ================= -->
 <div class="sidebar">
   <div class="logo">🛒 SmartStore</div>
   <div class="nav">
@@ -219,7 +222,6 @@ tr:hover {
   </div>
 </div>
 
-<!-- ================= MAIN ================= -->
 <div class="main">
 
   <div class="topbar">
@@ -233,37 +235,25 @@ tr:hover {
   </div>
 
   <div class="cards">
-    <div class="card">
-      <h3>Total Products</h3>
-      <p id="totalProducts">0</p>
-    </div>
-
-    <div class="card">
-      <h3>Total Quantity</h3>
-      <p id="totalQty">0</p>
-    </div>
-
-    <div class="card">
-      <h3>Total Value</h3>
-      <p id="totalValue">0</p>
-    </div>
+    <div class="card"><h3>Total Products</h3><p id="totalProducts">0</p></div>
+    <div class="card"><h3>Total Quantity</h3><p id="totalQty">0</p></div>
+    <div class="card"><h3>Total Value</h3><p id="totalValue">0</p></div>
   </div>
 
   <div class="panel">
     <h3>➕ Add Product</h3>
-
     <input id="id" placeholder="ID">
     <input id="name" placeholder="Name">
     <input id="category" placeholder="Category">
     <input id="qty" type="number" placeholder="Qty">
     <input id="price" type="number" placeholder="Price">
-
     <button class="add" onclick="addProduct()">Add</button>
   </div>
 
   <table>
     <thead>
       <tr>
+        <th>Title</th>
         <th>ID</th>
         <th>Name</th>
         <th>Category</th>
@@ -272,7 +262,6 @@ tr:hover {
         <th>Actions</th>
       </tr>
     </thead>
-
     <tbody id="table"></tbody>
   </table>
 
@@ -298,6 +287,7 @@ function display(list = products) {
   list.forEach(p => {
     table.innerHTML += `
       <tr>
+        <td><strong>Product: ${p.name}</strong></td>
         <td>${p.id}</td>
         <td>${p.name}</td>
         <td>${p.category}</td>
