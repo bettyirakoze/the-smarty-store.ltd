@@ -1,390 +1,288 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>SmartStore Pro Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartStore Ltd. | Inventory Management System</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --danger: #dc2626;
+            --success: #16a34a;
+            --bg: #f8fafc;
+            --text-dark: #1e293b;
+            --border: #e2e8f0;
+        }
 
-<style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Segoe UI", sans-serif;
-}
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 20px;
+        }
 
-body {
-  background: #0a0f1a;
-  color: white;
-}
+        .app-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            min-height: 600px;
+        }
 
-/* ================= WELCOME (UNCHANGED BUT POLISHED) ================= */
-#welcome {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  background: radial-gradient(circle at top, #111827, #0a0f1a);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
-}
+        header {
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-.welcome-box {
-  text-align: center;
-  background: rgba(17, 24, 39, 0.9);
-  padding: 50px;
-  border-radius: 18px;
-  border: 1px solid #1f2937;
-  width: 380px;
-  backdrop-filter: blur(10px);
-}
+        nav button {
+            background: transparent;
+            border: 1px solid var(--border);
+            padding: 10px 20px;
+            margin-left: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
 
-.welcome-box h1 {
-  color: #f59e0b;
-  font-size: 30px;
-  margin-bottom: 10px;
-}
+        nav button.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
 
-.welcome-box p {
-  color: #94a3b8;
-  margin-bottom: 10px;
-}
+        .view { display: none; }
+        .view.active { display: block; animation: fadeIn 0.4s ease-in-out; }
 
-.welcome-box button {
-  margin-top: 15px;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 10px;
-  background: #f59e0b;
-  color: #0a0f1a;
-  font-weight: bold;
-  cursor: pointer;
-}
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-/* ================= SIDEBAR (LIKE DASHBOARD IMAGE) ================= */
-.sidebar {
-  position: fixed;
-  width: 240px;
-  height: 100vh;
-  background: #0f172a;
-  padding: 20px;
-  border-right: 1px solid #1f2937;
-}
+        /* Welcome Screen */
+        .welcome-section { text-align: center; padding: 80px 20px; }
+        .welcome-section h2 { font-size: 3rem; color: var(--primary); margin-bottom: 20px; }
+        .welcome-section p { font-size: 1.25rem; color: #64748b; margin-bottom: 40px; }
+        .start-btn {
+            background: var(--primary);
+            color: white;
+            padding: 18px 45px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 10px 15px rgba(37, 99, 235, 0.3);
+        }
 
-.logo {
-  font-size: 20px;
-  color: #f59e0b;
-  margin-bottom: 30px;
-}
+        /* Dashboard & Table */
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { background: #f1f5f9; text-align: left; padding: 15px; font-size: 0.9rem; color: #475569; border-bottom: 2px solid var(--border); }
+        td { padding: 15px; border-bottom: 1px solid var(--border); }
+        
+        .line-total-cell { font-weight: 600; color: #334155; }
+        .total-footer { background: #eff6ff; font-weight: 800; color: var(--primary); font-size: 1.1rem; }
 
-.nav div {
-  padding: 12px;
-  margin: 8px 0;
-  border-radius: 8px;
-  cursor: pointer;
-  color: #94a3b8;
-  transition: 0.3s;
-}
+        /* Forms */
+        .form-card { max-width: 600px; margin: 0 auto; background: #fdfdfd; padding: 25px; border-radius: 10px; border: 1px solid var(--border); }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; }
+        input { width: 100%; padding: 12px; border: 1.5px solid var(--border); border-radius: 8px; box-sizing: border-box; }
+        .error-msg { color: var(--danger); font-size: 0.85rem; margin-top: 6px; display: none; }
 
-.nav div:hover {
-  background: #1f2937;
-  color: white;
-}
-
-/* ================= MAIN DASHBOARD ================= */
-.main {
-  margin-left: 240px;
-  padding: 20px;
-  display: none;
-}
-
-/* ================= TOP BAR ================= */
-.topbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.topbar h2 {
-  color: #f59e0b;
-}
-
-/* ================= INPUTS ================= */
-input {
-  padding: 10px;
-  margin: 5px;
-  background: #0f172a;
-  color: white;
-  border: 1px solid #1f2937;
-  border-radius: 8px;
-}
-
-/* ================= BUTTONS ================= */
-button {
-  padding: 10px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.add { background: #22c55e; color: white; }
-.search { background: #f59e0b; color: #0a0f1a; }
-.edit { background: #3b82f6; color: white; }
-.delete { background: #ef4444; color: white; }
-
-/* ================= CARDS (LIKE IMAGE ANALYTICS BLOCKS) ================= */
-.cards {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 15px;
-  margin: 20px 0;
-}
-
-.card {
-  background: #111827;
-  padding: 18px;
-  border-radius: 14px;
-  border: 1px solid #1f2937;
-  text-align: center;
-}
-
-.card h3 {
-  color: #94a3b8;
-  font-size: 13px;
-}
-
-.card p {
-  font-size: 22px;
-  margin-top: 10px;
-  color: #f59e0b;
-  font-weight: bold;
-}
-
-/* ================= TABLE (DASHBOARD STYLE) ================= */
-table {
-  width: 100%;
-  background: #111827;
-  border-collapse: collapse;
-  border-radius: 12px;
-  overflow: hidden;
-  margin-top: 10px;
-}
-
-th, td {
-  padding: 12px;
-  border-bottom: 1px solid #1f2937;
-  text-align: left;
-}
-
-thead {
-  background: #0f172a;
-  color: #f59e0b;
-}
-
-tr:hover {
-  background: #1f2937;
-}
-
-/* TOTAL COLUMN */
-td:nth-child(6){
-  color: #22c55e;
-  font-weight: bold;
-}
-</style>
+        .search-container { display: flex; gap: 12px; margin-bottom: 25px; }
+        .btn-action { background: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; }
+        .btn-del { background: var(--danger); color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; }
+    </style>
 </head>
-
 <body>
 
-<!-- ================= WELCOME ================= -->
-<div id="welcome">
-  <div class="welcome-box">
-    <h1>🛒 SmartStore</h1>
-    <p>Inventory Management System</p>
-    <p>Smart Dashboard for Product Control</p>
-    <button onclick="startApp()">Enter Dashboard</button>
-  </div>
-</div>
+<div class="app-container">
+    <header id="main-nav" style="display: none;">
+        <h1>SmartStore <span style="color: var(--primary);">System</span></h1>
+        <nav>
+            <button id="nav-dashboard" onclick="changeView('dashboard')">Dashboard</button>
+            <button id="nav-add" onclick="changeView('add')">Add Product</button>
+            <button id="nav-update" onclick="changeView('update')">Update Stock</button>
+        </nav>
+    </header>
 
-<!-- ================= SIDEBAR ================= -->
-<div class="sidebar">
-  <div class="logo">SmartStore</div>
-  <div class="nav">
-    <div>📊 Dashboard</div>
-    <div>➕ Add Product</div>
-    <div>🔍 Search</div>
-    <div>📦 Inventory</div>
-  </div>
-</div>
+    <section id="welcome" class="view active">
+        <div class="welcome-section">
+            <h2>SmartStore Ltd.</h2>
+            <p>Professional inventory management with real-time calculations.</p>
+            <button class="start-btn" onclick="launchApp()">Launch Application</button>
+        </div>
+    </section>
 
-<!-- ================= MAIN ================= -->
-<div class="main">
+    <main id="dashboard" class="view">
+        <div class="search-container">
+            <input type="text" id="mainSearch" placeholder="Search by name or category...">
+            <button class="btn-action" onclick="performSearch()">Search</button>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Product Name</th>
+                    <th>Category</th>
+                    <th>Qty</th>
+                    <th>Unit Price</th>
+                    <th>Line Total</th> <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="inventory-rows"></tbody>
+            <tfoot>
+                <tr class="total-footer">
+                    <td colspan="5" style="text-align: right;">Grand Total Inventory Value:</td>
+                    <td id="grand-total-val" colspan="2">$0.00</td>
+                </tr>
+            </tfoot>
+        </table>
+    </main>
 
-  <!-- TOP -->
-  <div class="topbar">
-    <h2>Inventory Dashboard</h2>
+    <section id="add" class="view">
+        <div class="form-card">
+            <h2>Register New Product</h2>
+            <div class="form-group">
+                <label>Product ID</label>
+                <input type="text" id="new-id">
+                <div id="duplicate-err" class="error-msg">This ID already exists!</div>
+            </div>
+            <div class="form-group"><label>Product Name</label><input type="text" id="new-name"></div>
+            <div class="form-group"><label>Category</label><input type="text" id="new-cat"></div>
+            <div class="form-group"><label>Quantity</label><input type="number" id="new-qty" min="1"></div>
+            <div class="form-group"><label>Price ($)</label><input type="number" id="new-price" min="0.01" step="0.01"></div>
+            <button class="btn-action" style="width: 100%;" onclick="saveNewProduct()">Add to Inventory</button>
+        </div>
+    </section>
 
-    <div>
-      <input id="searchId" placeholder="Search">
-      <button class="search" onclick="searchProduct()">Search</button>
-      <button onclick="display(products)">Reset</button>
-    </div>
-  </div>
-
-  <!-- CARDS (LIKE IMAGE ANALYTICS) -->
-  <div class="cards">
-    <div class="card">
-      <h3>Total Products</h3>
-      <p id="totalProducts">0</p>
-    </div>
-
-    <div class="card">
-      <h3>Total Quantity</h3>
-      <p id="totalQty">0</p>
-    </div>
-
-    <div class="card">
-      <h3>Total Value</h3>
-      <p id="totalValue">0</p>
-    </div>
-  </div>
-
-  <!-- ADD -->
-  <div>
-    <input id="id" placeholder="ID">
-    <input id="name" placeholder="Name">
-    <input id="category" placeholder="Category">
-    <input id="qty" type="number" placeholder="Qty">
-    <input id="price" type="number" placeholder="Price">
-    <button class="add" onclick="addProduct()">Add</button>
-  </div>
-
-  <!-- TABLE -->
-  <table>
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Category</th>
-        <th>Qty</th>
-        <th>Price</th>
-        <th>Total</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody id="table"></tbody>
-  </table>
-
+    <section id="update" class="view">
+        <div class="form-card">
+            <h2>Modify Product Details</h2>
+            <div class="search-container">
+                <input type="text" id="lookup-id" placeholder="Enter Product ID...">
+                <button class="btn-action" onclick="searchForEdit()">Find</button>
+            </div>
+            <div id="edit-panel" style="display: none; border-top: 1px solid var(--border); padding-top: 20px;">
+                <p><strong>Modifying:</strong> <span id="edit-label-name" style="color: var(--primary);"></span></p>
+                <div class="form-group"><label>New Quantity</label><input type="number" id="edit-qty"></div>
+                <div class="form-group"><label>New Price ($)</label><input type="number" id="edit-price" step="0.01"></div>
+                <button class="btn-action" style="width: 100%;" onclick="submitUpdate()">Save Changes</button>
+            </div>
+        </div>
+    </section>
 </div>
 
 <script>
+    let inventory = [
+        { id: "101", name: "High-End Laptop", category: "Electronics", qty: 10, price: 1200.00 },
+        { id: "102", name: "Wireless Keyboard", category: "Accessories", qty: 50, price: 45.00 },
+        { id: "103", name: "Ergonomic Chair", category: "Furniture", qty: 5, price: 300.00 }
+    ];
 
-function startApp(){
-  document.getElementById("welcome").style.display="none";
-  document.querySelector(".main").style.display="block";
-}
+    function launchApp() {
+        document.getElementById('main-nav').style.display = 'flex';
+        changeView('dashboard');
+    }
 
-let products = [
-  {id:"1", name:"Phone", category:"Electronics", qty:10, price:300},
-  {id:"2", name:"Shoes", category:"Fashion", qty:20, price:50},
-  {id:"3", name:"Book", category:"Education", qty:15, price:10}
-];
+    function changeView(viewId) {
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+        document.getElementById(viewId).classList.add('active');
+        const activeNav = document.getElementById('nav-' + viewId);
+        if (activeNav) activeNav.classList.add('active');
+        if (viewId === 'dashboard') updateDisplay(inventory);
+    }
 
-function display(list = products){
-  let table = document.getElementById("table");
-  table.innerHTML="";
+    function updateDisplay(data) {
+        const list = document.getElementById('inventory-rows');
+        list.innerHTML = "";
+        let grandTotal = 0;
 
-  list.forEach(p=>{
-    let qty = Number(p.qty);
-    let price = Number(p.price);
-    let total = qty * price;
+        data.forEach(item => {
+            const lineTotal = item.qty * item.price; // Calculation for each item
+            grandTotal += lineTotal;
 
-    table.innerHTML += `
-      <tr>
-        <td>${p.id}</td>
-        <td>${p.name}</td>
-        <td>${p.category}</td>
-        <td>${qty}</td>
-        <td>${price}</td>
-        <td>${total}</td>
-        <td>
-          <button class="edit" onclick="editProduct('${p.id}')">Edit</button>
-          <button class="delete" onclick="deleteProduct('${p.id}')">Delete</button>
-        </td>
-      </tr>
-    `;
-  });
+            const row = `<tr>
+                <td>${item.id}</td>
+                <td>${item.name}</td>
+                <td>${item.category}</td>
+                <td>${item.qty}</td>
+                <td>$${item.price.toFixed(2)}</td>
+                <td class="line-total-cell">$${lineTotal.toFixed(2)}</td> <td><button class="btn-del" onclick="removeItem('${item.id}')">Delete</button></td>
+            </tr>`;
+            list.innerHTML += row;
+        });
 
-  updateStats(list);
-}
+        document.getElementById('grand-total-val').innerText = `$${grandTotal.toFixed(2)}`;
+    }
 
-function updateStats(list){
-  document.getElementById("totalProducts").innerText = list.length;
+    function saveNewProduct() {
+        const id = document.getElementById('new-id').value;
+        const name = document.getElementById('new-name').value;
+        const cat = document.getElementById('new-cat').value;
+        const qty = parseInt(document.getElementById('new-qty').value);
+        const price = parseFloat(document.getElementById('new-price').value);
 
-  let qty = list.reduce((a,b)=>a+Number(b.qty),0);
-  document.getElementById("totalQty").innerText = qty;
+        if (!id || !name || isNaN(qty) || isNaN(price) || qty < 0 || price < 0) {
+            alert("Error: Invalid Input.");
+            return;
+        }
 
-  let value = list.reduce((a,b)=>a+(Number(b.qty)*Number(b.price)),0);
-  document.getElementById("totalValue").innerText = value;
-}
+        if (inventory.some(p => p.id === id)) {
+            document.getElementById('duplicate-err').style.display = 'block';
+            return;
+        }
 
-function addProduct(){
-  let id=v("id"), name=v("name"), cat=v("category"),
-      qty=v("qty"), price=v("price");
+        inventory.push({ id, name, category: cat, qty, price });
+        document.getElementById('duplicate-err').style.display = 'none';
+        alert("Product added.");
+        changeView('dashboard');
+    }
 
-  if(!id||!name||!cat||!qty||!price) return;
+    function removeItem(id) {
+        if (confirm(`Delete Product ${id}?`)) {
+            inventory = inventory.filter(p => p.id !== id);
+            updateDisplay(inventory);
+        }
+    }
 
-  if(products.find(p=>p.id===id)) return alert("Duplicate ID");
+    function searchForEdit() {
+        const sid = document.getElementById('lookup-id').value;
+        const found = inventory.find(p => p.id === sid);
+        if (found) {
+            document.getElementById('edit-panel').style.display = 'block';
+            document.getElementById('edit-label-name').innerText = found.name;
+            document.getElementById('edit-qty').value = found.qty;
+            document.getElementById('edit-price').value = found.price;
+        } else {
+            alert("ID not found.");
+        }
+    }
 
-  products.push({
-    id,
-    name,
-    category: cat,
-    qty: Number(qty),
-    price: Number(price)
-  });
+    function submitUpdate() {
+        const sid = document.getElementById('lookup-id').value;
+        const idx = inventory.findIndex(p => p.id === sid);
+        inventory[idx].qty = parseInt(document.getElementById('edit-qty').value);
+        inventory[idx].price = parseFloat(document.getElementById('edit-price').value);
+        alert("Updated.");
+        changeView('dashboard');
+    }
 
-  display();
-}
-
-function deleteProduct(id){
-  if(!confirm("Delete?")) return;
-  products = products.filter(p=>p.id!==id);
-  display();
-}
-
-function editProduct(id){
-  let p = products.find(p=>p.id===id);
-
-  let qty = prompt("Qty", p.qty);
-  let price = prompt("Price", p.price);
-
-  if(qty) p.qty = Number(qty);
-  if(price) p.price = Number(price);
-
-  display();
-}
-
-function searchProduct(){
-  let val = v("searchId").toLowerCase();
-
-  let result = products.filter(p =>
-    p.id.includes(val) ||
-    p.name.toLowerCase().includes(val) ||
-    p.category.toLowerCase().includes(val)
-  );
-
-  display(result);
-}
-
-function v(id){
-  return document.getElementById(id).value.trim();
-}
-
-display();
-
+    function performSearch() {
+        const term = document.getElementById('mainSearch').value.toLowerCase();
+        const filtered = inventory.filter(p => p.name.toLowerCase().includes(term) || p.category.toLowerCase().includes(term));
+        updateDisplay(filtered);
+    }
 </script>
-
 </body>
-</html>i need this button of the  interactive which is  in same line of the dashboard
+</html>
